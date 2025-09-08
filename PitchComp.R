@@ -1,23 +1,25 @@
-# Ask user for pitch movement input
+# Ask user for pitch movement input 
+#Valid pitch types are listed at https://www.daktronics.com/en-us/support/kb/000001823
 pfx_x_input <- as.numeric(readline(prompt = "Enter the desired horizontal break: "))
 pfx_z_input <- as.numeric(readline(prompt = "Enter the desired vertical break: "))
 rpm_input <- as.numeric(readline(prompt = "Enter the desired minimum RPM: "))
-pitch_type_input <- tolower(readline(prompt = "Enter the pitch type (e.g., 'fastball', 'slider', etc.): "))
+pitch_type_input <- tolower(readline(prompt = "Enter the pitch type: "))
 handedness_input <- tolower(readline(prompt = "Are you right-handed or left-handed? (Enter 'right' or 'left'): "))
 
+#Pitcher Handedness
 if (handedness_input == "right") {
-  handedness_filter <- "R"  # Match right-handed pitchers
+  handedness_filter <- "R"  
 } else if (handedness_input == "left") {
-  handedness_filter <- "L"  # Match left-handed pitchers
+  handedness_filter <- "L"
 } else {
   stop("Invalid input. Please enter 'right' or 'left'.")
 }
 
-# Filter by pitcher handedness and pitch type
+# Filter by pitcher handedness, rpm, and pitch type
 filtered_data <- savant_data %>%
   filter(pitch_hand == handedness_filter & 
            tolower(pitch_name) == pitch_type_input & 
-           release_spin_rate >= rpm_input)  # Filter by RPM
+           release_spin_rate >= rpm_input)
 
 if (nrow(filtered_data) == 0) {
   stop("No pitches found for the selected criteria.")
